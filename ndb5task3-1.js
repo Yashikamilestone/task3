@@ -16,7 +16,7 @@ app.use(function (req,res,next){
 });
 let axios = require("axios");
 app.use(bodyParser.json());
-const port = 2410;
+var port = process.env.PORT || 2410;
 
 let baseUrl = "https://jsonplaceholder.typicode.com";
 app.listen(port, () => console.log(`Node app listening on port ${port}!`));
@@ -41,11 +41,12 @@ app.post("/myserver", async function(req,res){
         }
     }
     catch(error){
+        console.log("inside catch")
         if(error.response){
             let{status,statusText}= error.response;
-            let response = {data : error.message, status :status}
-            console.log(response)
-            res.status(401).send(response.data)
+            let response = {data : {message : error.message, code :error.code}}
+            console.log(error.code)
+            res.status(401).send(response)
         }
         else { res.status(404).send(error.message)}
     }
